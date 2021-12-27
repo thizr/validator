@@ -5,7 +5,7 @@ const input = (req, res, next) =>{
 
     const validatiionRules = {
         "email" : "email",
-        "phone" : "string",
+        "phone" : "string|phone",
         "password" : "string|min:6|strict",
     }
 
