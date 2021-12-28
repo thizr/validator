@@ -1,19 +1,25 @@
 const Validator =require("validatorjs")
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]/;
-
-
 const validator = (body, rules, customMessages, callback) => {
-    const validatiion = new Validator(body, rules, customMessages)
-    validatiion.passes(()=>callback(null, true))
-    validatiion.fails(()=>callback(validatiion.errors, false))
+    const validation = new Validator(body, rules, customMessages)
+    validation.passes(()=>callback(null, true))
+    validation.fails(()=>callback(validation.errors, false))
 }
 
-Validator.register('strict', value => passwordRegex.test(value),
-                    'Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et une lettre')
+Validator.register('strict', (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]/;
+    return password.match(passwordRegex)
+    },
+    'Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et une lettre')
 
-Validator.register('phone', ()=>{
-    return value.match(/^\d{2}\d{7}$/)
+Validator.register('phone', (phone)=>{
+    const phoneRegex = /^7[05678]{1}\d{7}$/
+    return phone.match(phoneRegex)
 }, "Le numero de téléphone n'a pas le bon format. Ex : 771234567")
+
+Validator.register('cardNumber', (cardNumber)=>{
+    const cardNumberRegex = /^[12]{1}\d{3}\d{4}\d{5}$/
+    return cardNumber.match(cardNumberRegex)
+}, "Le numero de carte d'identité n'est pas correct")
 
 module.exports = validator
